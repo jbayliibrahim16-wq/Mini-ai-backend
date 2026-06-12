@@ -138,13 +138,7 @@ app.get('/api/chats/:id', async (req, res) => {
 // << جديد: API الشات للواجهة - عدل هون وحط كود OpenRouter تبعك
 app.post('/api/chat', async (req, res) => {
   try {
-    const { message, history } = req.body;
-
-    // مؤقت للتجربة - بعدين حط كود OpenRouter هون
-    const reply = `وصلتني رسالتك: "${message}" 🔥`;
-
-    // مثال كود OpenRouter اذا بدك تستخدمو:
-    /*
+    const { message, history = [] } = req.body;
     const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
       model: 'openai/gpt-3.5-turbo',
       messages: [...history, { role: 'user', content: message }]
@@ -155,12 +149,9 @@ app.post('/api/chat', async (req, res) => {
       }
     });
     const reply = response.data.choices[0].message.content;
-    */
-
     res.json({ reply: reply });
-
   } catch (error) {
-    console.error('Chat Error:', error.message);
+    console.error('Chat Error:', error.response?.data || error.message);
     res.status(500).json({ error: 'صار خطأ بالسيرفر' });
   }
 });
